@@ -162,10 +162,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f30364fa7f1b47e4a8925dd107a7afdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Head: {fileID: 3894238597947593267, guid: a051b8daeb090b94586ea568605444a1, type: 3}
-  Body: {fileID: 3809631776360205017, guid: 50a55fa04df8d774d917dc042142b362, type: 3}
-  Bone: {fileID: 3649639452199461386, guid: 475a0c7a422014c408fd23a9dcfea527, type: 3}
-  Apple: {fileID: 268648881695079709, guid: 8f09ae71334498844b5a756e3ea335a7, type: 3}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
