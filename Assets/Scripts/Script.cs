@@ -104,6 +104,7 @@ public class Script : MonoBehaviour
                 Destroy(snake.spine[i]);
             CancelInvoke("Cadr");
             text.text = "";
+            pos = 0;
             Start();
         }
     }
