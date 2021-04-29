@@ -6,9 +6,10 @@ public class Script : MonoBehaviour
 {
     static Pos right = new Pos(1, 0), left = new Pos(-1, 0), up = new Pos(0, 1), down = new Pos(0, -1);
     public Text text;
+    ushort pos = 0;
     Snake snake;
     GameObject Apple, Head, Body, Bone;
-    Pos[] epsilon = {up, up, up, up, up, up, up, up, up, up, up, up, up, up, up, up,
+    Pos[] route = {up, up, up, up, up, up, up, up, up, up, up, up, up, up, up, up,
         right, down, down, down, down, down, down, down, down, down, down, down, down, down, down, down, down, down, down,
         right, up, up, up, up, up, up, up, up, up, up, up, up, up, up, up, up, up, up,
         right, down, down, down, down, down, down, down, down, down, down, down, down, down, down, down, down, down, down,
@@ -79,22 +80,22 @@ public class Script : MonoBehaviour
         Pos delta = up;
         snake = new Snake(alfa, beta, gamma, delta);
         DrawApple();
-        InvokeRepeating("Cadr", 0f, 0.250f);
+        InvokeRepeating("Cadr", 0f, 0.025f);
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
-            if(snake.direction[0]!=down)
-            snake.futuredirection = up;
-        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
-            if (snake.direction[0] != up)
-                snake.futuredirection = down;
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
-            if (snake.direction[0] != left)
-                snake.futuredirection = right;
-        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
-            if (snake.direction[0] != right)
-                snake.futuredirection = left;
+        //if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+        //    if(snake.direction[0]!=down)
+        //    snake.futuredirection = up;
+        //if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+        //    if (snake.direction[0] != up)
+        //        snake.futuredirection = down;
+        //if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+        //    if (snake.direction[0] != left)
+        //        snake.futuredirection = right;
+        //if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+        //    if (snake.direction[0] != right)
+        //        snake.futuredirection = left;
         if (Input.GetKeyDown(KeyCode.R))
         {
             for(int i = 0; i < snake.body.Length; i++)
@@ -108,6 +109,7 @@ public class Script : MonoBehaviour
     }
     void Cadr()
     {
+        snake.futuredirection = route[pos];
         if (snake.body[0].transform.position.x + snake.futuredirection.x == Apple.transform.position.x && snake.body[0].transform.position.y + snake.futuredirection.y == Apple.transform.position.y)
         {
             Array.Resize(ref snake.body, snake.body.Length + 1);
@@ -142,12 +144,16 @@ public class Script : MonoBehaviour
                 snake.spine[i].transform.position = new Vector3(snake.body[i + 1].transform.position.x + snake.direction[i].x / 2, snake.body[i + 1].transform.position.y + snake.direction[i].y / 2, 0f);
                 snake.spine[i].transform.rotation = new Quaternion(0f, 0f, Math.Abs(snake.direction[i].y) * 90f, Math.Abs(snake.direction[i].y) * 90f);
             }
-            for (int i = snake.body.Length - 1; i > 1; i--)
-                if (snake.body[i].transform.position == snake.body[0].transform.position)
-                    Death();
-            if (snake.body[0].transform.position.x < 0 || snake.body[0].transform.position.x > 29 || snake.body[0].transform.position.y < 0 || snake.body[0].transform.position.y > 19)
-                Death();
+            //for (int i = snake.body.Length - 1; i > 1; i--)
+            //    if (snake.body[i].transform.position == snake.body[0].transform.position)
+            //        Death();
+            //if (snake.body[0].transform.position.x < 0 || snake.body[0].transform.position.x > 29 || snake.body[0].transform.position.y < 0 || snake.body[0].transform.position.y > 19)
+            //    Death();
         }
+        if (pos != 599)
+            pos++;
+        else
+            pos = 0;
     }
     void Death()
     {
