@@ -80,7 +80,7 @@ public class Script : MonoBehaviour
         Pos delta = up;
         snake = new Snake(alfa, beta, gamma, delta);
         DrawApple();
-        InvokeRepeating("Cadr", 0f, 0.025f);
+        InvokeRepeating("Cadr", 0f, 0.0025f);
     }
     void Update()
     {
@@ -110,51 +110,62 @@ public class Script : MonoBehaviour
     }
     void Cadr()
     {
-        snake.futuredirection = route[pos];
-        if (snake.body[0].transform.position.x + snake.futuredirection.x == Apple.transform.position.x && snake.body[0].transform.position.y + snake.futuredirection.y == Apple.transform.position.y)
+        if (snake.body.Length < 60)
         {
-            Array.Resize(ref snake.body, snake.body.Length + 1);
-            Array.Resize(ref snake.spine, snake.spine.Length + 1);
-            Array.Resize(ref snake.direction, snake.direction.Length + 1);
-            snake.body[snake.body.Length - 1] = Instantiate(Body, snake.body[snake.body.Length - 2].transform.position, Head.transform.rotation);
-            snake.spine[snake.spine.Length - 1] = Instantiate(Bone, snake.spine[snake.spine.Length - 2].transform.position, snake.spine[snake.spine.Length - 2].transform.rotation);
-            snake.direction[snake.direction.Length - 1] = snake.direction[snake.direction.Length - 2];
-            for (int i = snake.direction.Length - 2; i > 0; i--)
-                snake.direction[i] = snake.direction[i - 1];
-            snake.direction[0] = snake.futuredirection;
-            for (int i = snake.body.Length - 2; i > 0; i--)
-                snake.body[i].transform.position = snake.body[i - 1].transform.position;
-            snake.body[0].transform.position = new Vector3(snake.body[0].transform.position.x + snake.futuredirection.x, snake.body[0].transform.position.y + snake.futuredirection.y, 0f);
-            for (int i = snake.direction.Length - 2; i >= 0; i--)
-            {
-                snake.spine[i].transform.position = new Vector3(snake.body[i + 1].transform.position.x + snake.direction[i].x / 2, snake.body[i + 1].transform.position.y + snake.direction[i].y / 2, 0f);
-                snake.spine[i].transform.rotation = new Quaternion(0f, 0f, Math.Abs(snake.direction[i].y) * 90f, Math.Abs(snake.direction[i].y) * 90f);
-            }
-            DrawApple();
+            if (snake.body[0].transform.position.y != Apple.transform.position.y && (snake.body[0].transform.position.x == 0 || snake.body[0].transform.position.x == 29)
+                if (snake.body[0].transform.position.y > Apple.transform.position.y)
+                    snake.futuredirection = down;
+                else
+                    snake.futuredirection = up;
         }
         else
         {
-            for (int i = snake.direction.Length - 1; i > 0; i--)
-                snake.direction[i] = snake.direction[i - 1];
-            snake.direction[0] = snake.futuredirection;
-            for (int i = snake.body.Length - 1; i > 0; i--)
-                snake.body[i].transform.position = snake.body[i - 1].transform.position;
-            snake.body[0].transform.position = new Vector3(snake.body[0].transform.position.x + snake.futuredirection.x, snake.body[0].transform.position.y + snake.futuredirection.y, 0f);
-            for (int i = snake.direction.Length - 1; i >= 0; i--)
+            snake.futuredirection = route[pos];
+            if (snake.body[0].transform.position.x + snake.futuredirection.x == Apple.transform.position.x && snake.body[0].transform.position.y + snake.futuredirection.y == Apple.transform.position.y)
             {
-                snake.spine[i].transform.position = new Vector3(snake.body[i + 1].transform.position.x + snake.direction[i].x / 2, snake.body[i + 1].transform.position.y + snake.direction[i].y / 2, 0f);
-                snake.spine[i].transform.rotation = new Quaternion(0f, 0f, Math.Abs(snake.direction[i].y) * 90f, Math.Abs(snake.direction[i].y) * 90f);
+                Array.Resize(ref snake.body, snake.body.Length + 1);
+                Array.Resize(ref snake.spine, snake.spine.Length + 1);
+                Array.Resize(ref snake.direction, snake.direction.Length + 1);
+                snake.body[snake.body.Length - 1] = Instantiate(Body, snake.body[snake.body.Length - 2].transform.position, Head.transform.rotation);
+                snake.spine[snake.spine.Length - 1] = Instantiate(Bone, snake.spine[snake.spine.Length - 2].transform.position, snake.spine[snake.spine.Length - 2].transform.rotation);
+                snake.direction[snake.direction.Length - 1] = snake.direction[snake.direction.Length - 2];
+                for (int i = snake.direction.Length - 2; i > 0; i--)
+                    snake.direction[i] = snake.direction[i - 1];
+                snake.direction[0] = snake.futuredirection;
+                for (int i = snake.body.Length - 2; i > 0; i--)
+                    snake.body[i].transform.position = snake.body[i - 1].transform.position;
+                snake.body[0].transform.position = new Vector3(snake.body[0].transform.position.x + snake.futuredirection.x, snake.body[0].transform.position.y + snake.futuredirection.y, 0f);
+                for (int i = snake.direction.Length - 2; i >= 0; i--)
+                {
+                    snake.spine[i].transform.position = new Vector3(snake.body[i + 1].transform.position.x + snake.direction[i].x / 2, snake.body[i + 1].transform.position.y + snake.direction[i].y / 2, 0f);
+                    snake.spine[i].transform.rotation = new Quaternion(0f, 0f, Math.Abs(snake.direction[i].y) * 90f, Math.Abs(snake.direction[i].y) * 90f);
+                }
+                DrawApple();
             }
-            //for (int i = snake.body.Length - 1; i > 1; i--)
-            //    if (snake.body[i].transform.position == snake.body[0].transform.position)
-            //        Death();
-            //if (snake.body[0].transform.position.x < 0 || snake.body[0].transform.position.x > 29 || snake.body[0].transform.position.y < 0 || snake.body[0].transform.position.y > 19)
-            //    Death();
+            else
+            {
+                for (int i = snake.direction.Length - 1; i > 0; i--)
+                    snake.direction[i] = snake.direction[i - 1];
+                snake.direction[0] = snake.futuredirection;
+                for (int i = snake.body.Length - 1; i > 0; i--)
+                    snake.body[i].transform.position = snake.body[i - 1].transform.position;
+                snake.body[0].transform.position = new Vector3(snake.body[0].transform.position.x + snake.futuredirection.x, snake.body[0].transform.position.y + snake.futuredirection.y, 0f);
+                for (int i = snake.direction.Length - 1; i >= 0; i--)
+                {
+                    snake.spine[i].transform.position = new Vector3(snake.body[i + 1].transform.position.x + snake.direction[i].x / 2, snake.body[i + 1].transform.position.y + snake.direction[i].y / 2, 0f);
+                    snake.spine[i].transform.rotation = new Quaternion(0f, 0f, Math.Abs(snake.direction[i].y) * 90f, Math.Abs(snake.direction[i].y) * 90f);
+                }
+                //for (int i = snake.body.Length - 1; i > 1; i--)
+                //    if (snake.body[i].transform.position == snake.body[0].transform.position)
+                //        Death();
+                //if (snake.body[0].transform.position.x < 0 || snake.body[0].transform.position.x > 29 || snake.body[0].transform.position.y < 0 || snake.body[0].transform.position.y > 19)
+                //    Death();
+            }
+            if (pos != 599)
+                pos++;
+            else
+                pos = 0;
         }
-        if (pos != 599)
-            pos++;
-        else
-            pos = 0;
     }
     void Death()
     {
