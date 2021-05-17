@@ -6,7 +6,7 @@ public class Script : MonoBehaviour
 {
     static Pos right = new Pos(1, 0), left = new Pos(-1, 0), up = new Pos(0, 1), down = new Pos(0, -1);
     public Text text;
-    //bool start = false;
+    bool start = false;
     Snake snake;
     GameObject Apple, Head, Body, Bone;
     System.Random r = new System.Random();
@@ -41,67 +41,181 @@ public class Script : MonoBehaviour
         Body = GameObject.Find("Body");
         Bone = GameObject.Find("Bone");
         Apple = GameObject.Find("Apple");
-        GameObject[] alfa = { Instantiate(Head, new Vector3(0f, 3f, 0f), Head.transform.rotation) , Instantiate(Body, new Vector3(0f, 2f, 0f), Body.transform.rotation), Instantiate(Body, new Vector3(0f, 1f, 0f), Body.transform.rotation), Instantiate(Body, new Vector3(0f, 0f, 0f), Body.transform.rotation) },
+        GameObject[] alfa = { Instantiate(Head, new Vector3(0f, 3f, 0f), Head.transform.rotation), Instantiate(Body, new Vector3(0f, 2f, 0f), Body.transform.rotation), Instantiate(Body, new Vector3(0f, 1f, 0f), Body.transform.rotation), Instantiate(Body, new Vector3(0f, 0f, 0f), Body.transform.rotation) },
             beta = { Instantiate(Bone, new Vector3(0f, 2.5f, 0f), Bone.transform.rotation), Instantiate(Bone, new Vector3(0f, 1.5f, 0f), Bone.transform.rotation), Instantiate(Bone, new Vector3(0f, 0.5f, 0f), Bone.transform.rotation) };
         Pos[] gamma = { up, up, up };
         Pos delta = up;
         snake = new Snake(alfa, beta, gamma, delta);
         DrawApple();
-        InvokeRepeating("Cadr", 0f, 0.25f);
+        InvokeRepeating("Cadr", 0f, 0.0005f);
     }
     void Update()
     {
-        if ((Input.GetAxis("Vertical") > 0 || Input.GetAxis("Vertical1") < 0) && snake.direction[0] != down)
-            snake.futuredirection = up;
-        if ((Input.GetAxis("Vertical") < 0 || Input.GetAxis("Vertical1") > 0) && snake.direction[0] != up)
-            snake.futuredirection = down;
-        if (Input.GetAxis("Horizontal") > 0 && snake.direction[0] != left)
-            snake.futuredirection = right;
-        if (Input.GetAxis("Horizontal") < 0 && snake.direction[0] != right)
-            snake.futuredirection = left;
+        //if ((Input.GetAxis("Vertical") > 0 || Input.GetAxis("Vertical1") < 0) && snake.direction[0] != down)
+        //    snake.futuredirection = up;
+        //if ((Input.GetAxis("Vertical") < 0 || Input.GetAxis("Vertical1") > 0) && snake.direction[0] != up)
+        //    snake.futuredirection = down;
+        //if (Input.GetAxis("Horizontal") > 0 && snake.direction[0] != left)
+        //    snake.futuredirection = right;
+        //if (Input.GetAxis("Horizontal") < 0 && snake.direction[0] != right)
+        //    snake.futuredirection = left;
         if (Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.JoystickButton5) || Input.GetKeyDown(KeyCode.JoystickButton3))
         {
-            for(int i = 0; i < snake.body.Length; i++)
+            for (int i = 0; i < snake.body.Length; i++)
                 Destroy(snake.body[i]);
             for (int i = 0; i < snake.spine.Length; i++)
                 Destroy(snake.spine[i]);
             CancelInvoke("Cadr");
             text.text = "";
             Start();
+            start = false;
         }
     }
     void Cadr()
     {
-        //if (snake.body.Length < 40)
-        //{
-        //    if(snake.body[0].transform.position.y == 0 || snake.body[0].transform.position.y == 19)
-        //    {
-        //        if (snake.body[0].transform.position.x == Apple.transform.position.x)
-        //            if (snake.direction[0].y != 0)
-        //                if (snake.body[0].transform.position.x == 29)
-        //                    snake.futuredirection = left;
-        //                else
-        //                    snake.futuredirection = right;
-        //            else if (snake.body[0].transform.position.y == 0)
-        //                snake.futuredirection = up;
-        //            else
-        //                snake.futuredirection = down;
-        //        else if (snake.body[0].transform.position.x > Apple.transform.position.x)
-        //            if (snake.direction[0] != right)
-        //                snake.futuredirection = left;
-        //            else if (snake.body[0].transform.position.y == 0)
-        //                snake.futuredirection = up;
-        //            else
-        //                snake.futuredirection = down;
-        //        else if (snake.body[0].transform.position.x < Apple.transform.position.x)
-        //            if (snake.direction[0] != left)
-        //                snake.futuredirection = right;
-        //            else if (snake.body[0].transform.position.y == 0)
-        //                snake.futuredirection = up;
-        //            else
-        //                snake.futuredirection = down;
-        //    }
-        //}
+        if (snake.body.Length < 40)
+        {
+            if (snake.body[0].transform.position.y == 0 || snake.body[0].transform.position.y == 19)
+            {
+                if (snake.body[0].transform.position.x == Apple.transform.position.x)
+                    if (snake.direction[0].y != 0)
+                        if (snake.body[0].transform.position.x == 29)
+                            snake.futuredirection = left;
+                        else
+                            snake.futuredirection = right;
+                    else if (snake.body[0].transform.position.y == 0)
+                        snake.futuredirection = up;
+                    else
+                        snake.futuredirection = down;
+                else if (snake.body[0].transform.position.x > Apple.transform.position.x)
+                    if (snake.direction[0] != right)
+                        snake.futuredirection = left;
+                    else if (snake.body[0].transform.position.y == 0)
+                        snake.futuredirection = up;
+                    else
+                        snake.futuredirection = down;
+                else if (snake.body[0].transform.position.x < Apple.transform.position.x)
+                    if (snake.direction[0] != left)
+                        snake.futuredirection = right;
+                    else if (snake.body[0].transform.position.y == 0)
+                        snake.futuredirection = up;
+                    else
+                        snake.futuredirection = down;
+            }
+        }
+        else if (snake.body.Length >= 40 && snake.body.Length < 400)
+        {
+            if (!start)
+            {
+                if (snake.body[0].transform.position.y == 0)
+                    if (snake.body[0].transform.position.x != 0)
+                        if (snake.direction[0] != right)
+                            snake.futuredirection = left;
+                        else
+                            snake.futuredirection = up;
+                    else
+                        snake.futuredirection = right;
+                else if (snake.body[0].transform.position.y == 19)
+                    if (snake.direction[0] == up)
+                        if (snake.body[0].transform.position.x != 29)
+                            snake.futuredirection = right;
+                        else
+                            snake.futuredirection = left;
+                    else
+                        snake.futuredirection = down;
+                if (snake.body[0].transform.position.x == 0 && snake.body[0].transform.position.y == 0 && snake.direction[0] == left)
+                {
+                    start = true;
+                    snake.futuredirection = up;
+                }
+            }
+            else
+            {
+                if (snake.body[0].transform.position.y == 0)
+                    if (snake.body[0].transform.position.x != 0)
+                        snake.futuredirection = left;
+                    else
+                        snake.futuredirection = up;
+                else if (snake.body[0].transform.position.x <= snake.body[snake.body.Length - 1].transform.position.x)
+                {
+                    if (snake.body[0].transform.position.y == 19)
+                        if (snake.body[0].transform.position.x % 2 == 0)
+                            snake.futuredirection = right;
+                        else
+                            snake.futuredirection = down;
+                    else if (snake.body[0].transform.position.y == 1)
+                        if (snake.body[0].transform.position.x % 2 == 1)
+                            snake.futuredirection = right;
+                        else
+                            snake.futuredirection = up;
+                }
+                else if (snake.body[0].transform.position.x <= Apple.transform.position.x)
+                    if (Apple.transform.position.y != 0)
+                        if (snake.body[0].transform.position.y < Apple.transform.position.y)
+                        {
+                            if (snake.direction[0] != down)
+                                snake.futuredirection = up;
+                            else
+                                snake.futuredirection = right;
+                        }
+                        else if (snake.body[0].transform.position.y > Apple.transform.position.y)
+                        {
+                            if (snake.direction[0] != up)
+                                snake.futuredirection = down;
+                            else
+                                snake.futuredirection = right;
+                        }
+                        else
+                            snake.futuredirection = right;
+                    else if (snake.body[0].transform.position.x < Apple.transform.position.x)
+                        snake.futuredirection = right;
+                    else
+                        snake.futuredirection = down;
+                else if (snake.direction[0] != up)
+                    snake.futuredirection = down;
+                else
+                    snake.futuredirection = right;
+            }
+        }
+        else
+        {
+            if (start)
+                if (snake.body[0].transform.position.y != 0)
+                    if (snake.direction[0] != up)
+                        snake.futuredirection = down;
+                    else
+                        snake.futuredirection = right;
+                else
+                    snake.futuredirection = left;
+            else
+            {
+                Debug.Log("Сработало");
+                if (snake.body[0].transform.position.y == 0)
+                    if (snake.body[0].transform.position.x != 0)
+                        snake.futuredirection = left;
+                    else
+                        snake.futuredirection = up;
+                else if (snake.body[0].transform.position.y == 19)
+                    if (snake.body[0].transform.position.x % 2 == 0)
+                        snake.futuredirection = right;
+                    else
+                        snake.futuredirection = down;
+                else if (snake.body[0].transform.position.y == 1)
+                    if (snake.body[0].transform.position.x % 2 == 1 && snake.body[0].transform.position.x != 29)
+                        snake.futuredirection = right;
+                    else
+                        snake.futuredirection = up;
+            }
+            if (snake.body[0].transform.position.y == 0 && snake.body[0].transform.position.y == 0)
+            {
+                start = false;
+                snake.futuredirection = up;
+            }
+        }
+        moveSnake();
+    }
+    void moveSnake()
+    {
         if (snake.body[0].transform.position.x + snake.futuredirection.x == Apple.transform.position.x && snake.body[0].transform.position.y + snake.futuredirection.y == Apple.transform.position.y)
         {
             Array.Resize(ref snake.body, snake.body.Length + 1);
